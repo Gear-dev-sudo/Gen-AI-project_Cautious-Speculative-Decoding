@@ -16,6 +16,8 @@ This project implements a modified version of speculative decoding that prioriti
 Create your own venv or use conda env like:
 `conda create -n "Cautious_Spec" python=3.11.10`
 
+install pytorch from [Official Page](https://pytorch.org/get-started/locally/)
+
 
 `conda activate Cautious_Spec`
 
@@ -24,7 +26,10 @@ Create your own venv or use conda env like:
 
 - **Note here that all of the requirements except torch are listed in each of the notebooks, so please do not ignore the pip install magics in each of the notebook**
 
-- *Unsloth might cause trouble with the environment since ppl have diffrent architectures of GPUs, the current environment is based on Ampere GPUs*
+- *Unsloth might cause trouble with the environment since ppl have diffrent architectures of GPUs/ Different torch installations, the current environment is based on Ampere GPUs and cu121*
+
+- *each part of the repo are isolated from each other, so just click into whichever part you want to see*
+
 
 ### Structure
 ```
@@ -39,7 +44,7 @@ Create your own venv or use conda env like:
 └── Speculative decoding.ipynb
 ```
 #### Core Notebooks
-- **Finetune-Qwen-on-toxicity-dataset.ipynb**: Main finetuning script with instructions for model training and LoRA adapter usage
+- **Finetune-Qwen-on-toxicity-dataset.ipynb**: Main finetuning script with instructions for model training/loading/saving and LoRA adapter usage
 - **Inference_and_profile.ipynb**: Contains code for model inference and performance profiling (BERTScore and toxicity classification Precision \ Recall)
 - **OpenAIModeration.ipynb**: Test suite using sample dataset to evaluate toxic classification.
 - **Qwen_2_5_Unsloth_finetuning.ipynb**: Typical Implementation of Unsloth acceleration for Qwen 2.5 model training
