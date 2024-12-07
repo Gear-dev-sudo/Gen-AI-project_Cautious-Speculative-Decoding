@@ -7,7 +7,7 @@ This project implements a modified version of speculative decoding that prioriti
  to improve toxicity detection, which comes at the cost of reduced [BERTScore](https://github.com/Tiiiger/bert_score) textual performance. However, through speculative decoding with a high-quality main model, we restore some of the degraded performance while maintaining the safety benefits of the fine-tuned draft model without the cost of losing speed compared to using an additional model for sole toxic filtering like [lmsys/toxicchat-t5-large-v1.0](https://huggingface.co/lmsys/toxicchat-t5-large-v1.0). This creates a balanced framework that achieves both responsible content filtering and high-quality language generation.
 
 ### Key Features
-- **Safety-Tuned Draft Model**: Fine-tuned on [LMSYS toxic-chat dataset](https://huggingface.co/datasets/lmsys/toxic-chat) for enhanced traditional jailbreaking or toxicity awareness
+- **Safety-Tuned Draft Model**: Fine-tuned on an [Adapted from LMSYS toxic-chat dataset](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2) for enhanced traditional jailbreaking or toxicity awareness
 - **Quality Restoration**: Uses main model's higher quality outputs to compensate for draft model's BERTScore degradation
 - **Performance Balance**: Maintains efficient generation speed while improving output quality
 - **Instruction Swapping**: Supports dynamic instruction modification between draft and verification stages
