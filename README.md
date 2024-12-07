@@ -13,16 +13,26 @@ This project implements a modified version of speculative decoding that prioriti
 - **Instruction Swapping**: Supports dynamic instruction modification between draft and verification stages
 
 ### Usage 
-Create your own venv or use conda env like:
+<!-- Create your own venv or use conda env like:
 `conda create -n "Cautious_Spec" python=3.11.10`
 
-install pytorch from [Official Page](https://pytorch.org/get-started/locally/)
+install pytorch from [Official Page](https://pytorch.org/get-started/locally/) -->
+
+clone and cd into this directory.
+
+`conda create -n "Cautious_Spec" python=3.11.10`
 
 
 `conda activate Cautious_Spec`
 
 
-`pip install -r requirements.txt`
+```pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 # install torch 2.5.1 with cu121```
+
+
+`pip install -r ./requirements.txt`
+
+- optional:
+    - in bash:`wandb login` to login to your WandB account and check out finetuning progress
 
 - **Note here that all of the requirements except torch are listed in each of the notebooks, so please do not ignore the pip install magics in each of the notebook**
 
@@ -62,6 +72,7 @@ install pytorch from [Official Page](https://pytorch.org/get-started/locally/)
 
 - **Profiling Dataset**: Due to limited compute resources, our model BERTScore is profiled on a subset of the [yahma/alpaca-cleaned](https://huggingface.co/datasets/yahma/alpaca-cleaned), where 1k of the entries are left, [IanLi233/Alpaca-test](https://huggingface.co/datasets/IanLi233/Alpaca-test)
 
+- **Speculative Decoding Speedup**: In our speculative decoding setup, a Q4 quantizted draft model is used, so on hardware that does not support Q4 quantization acclearation, the speeedup might not be significant.
 ```
 max_seq_length = 2048 # Choose any! Unsloth auto support RoPE Scaling internally!
 dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
