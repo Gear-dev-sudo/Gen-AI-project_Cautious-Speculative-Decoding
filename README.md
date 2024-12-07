@@ -1,16 +1,23 @@
 *For E6694 Gen AI Project*
 # Cautious Speculative Decoding
-## A Safety-First Approach to Accelerated Language Model Generation
+## A Safety-First Approach to Language Model Generation without filtering overhead or performance degredation.
+
+### Resources
+⚡ [Model Repository](https://huggingface.co/IanLi233/Cautious_Qwen) &nbsp;&nbsp;&nbsp;&nbsp; 🛡️ [Toxicity Detection Dataset](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2)
+
+📈 [Text Performance Dataset](https://huggingface.co/datasets/IanLi233/Alpaca-test/viewer/default/test)
+
+---
 
 ### Project Overview
-This project implements a modified version of speculative decoding that prioritizes safety and content filtering while maintaining generation quality. [The draft model](https://huggingface.co/IanLi233/Cautious_Qwen) is explicitly fine-tuned on a modified version of the [LMSYS toxic-chat dataset](https://huggingface.co/datasets/lmsys/toxic-chat), namely (IanLi233/Toxic-Chat-V2)[https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2]
+This project implements a modified version of speculative decoding that prioritizes safety and content filtering while maintaining generation quality. [The draft model](https://huggingface.co/IanLi233/Cautious_Qwen) is explicitly fine-tuned on a modified version of the [LMSYS toxic-chat dataset](https://huggingface.co/datasets/lmsys/toxic-chat),which you can find  [here](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2),
  to improve toxicity detection, which comes at the cost of reduced [BERTScore](https://github.com/Tiiiger/bert_score) textual performance. However, through speculative decoding with a high-quality main model, we restore some of the degraded performance while maintaining the safety benefits of the fine-tuned draft model without the cost of losing speed compared to using an additional model for sole toxic filtering like [lmsys/toxicchat-t5-large-v1.0](https://huggingface.co/lmsys/toxicchat-t5-large-v1.0). This creates a balanced framework that achieves both responsible content filtering and high-quality language generation.
 
 ### Key Features
-- **Safety-Tuned Draft Model**: Fine-tuned on an [Adapted from LMSYS toxic-chat dataset](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2) for enhanced traditional jailbreaking or toxicity awareness
-- **Quality Restoration**: Uses main model's higher quality outputs to compensate for draft model's BERTScore degradation
-- **Performance Balance**: Maintains efficient generation speed while improving output quality
-- **Instruction Swapping**: Supports dynamic instruction modification between draft and verification stages
+- **Safety-Tuned Draft Model**: Fine-tuned on an [Adapted from LMSYS toxic-chat dataset](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2) for enhanced traditional jailbreaking or toxicity awareness, when the draft model detects the prompt to be "toxic", the generation simply terminates.
+- **Quality Restoration**: Uses main model's higher quality outputs to compensate for draft model(with toxic filtering capabilities)'s BERTScore degradation 
+- **Performance Balance**: Maintains efficient generation speed while implementing effective toxicity filtering.
+
 
 ### Usage 
 <!-- Create your own venv or use conda env like:
@@ -73,7 +80,8 @@ clone and cd into this directory.
 - **Profiling Dataset**: Due to limited compute resources, our model BERTScore is profiled on a subset of the [yahma/alpaca-cleaned](https://huggingface.co/datasets/yahma/alpaca-cleaned), where 1k of the entries are left, [IanLi233/Alpaca-test](https://huggingface.co/datasets/IanLi233/Alpaca-test)
 
 - **Speculative Decoding Speedup**: In our speculative decoding setup, a Q4 quantizted draft model is used, so on hardware that does not support Q4 quantization acclearation, the speeedup might not be significant.
-```
+
+<!--  *The Draft Model Inference Example*```
 max_seq_length = 2048 # Choose any! Unsloth auto support RoPE Scaling internally!
 dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
@@ -143,5 +151,5 @@ inputs = tokenizer(
 outputs = model.generate(**inputs, max_new_tokens = 64, use_cache = True)
 tokenizer.batch_decode(outputs)
 
-```
+``` -->
 
