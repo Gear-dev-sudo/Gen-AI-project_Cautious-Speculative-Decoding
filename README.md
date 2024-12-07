@@ -12,6 +12,20 @@ This project implements a modified version of speculative decoding that prioriti
 - **Performance Balance**: Maintains efficient generation speed while improving output quality
 - **Instruction Swapping**: Supports dynamic instruction modification between draft and verification stages
 
+### Usage 
+Create your own venv or use conda env like:
+`conda create -n "Cautious_Spec" python=3.11.10`
+
+
+`conda activate Cautious_Spec`
+
+
+`pip install -r requirements.txt`
+
+- **Note here that all of the requirements except torch are listed in each of the notebooks, so please do not ignore the pip install magics in each of the notebook**
+
+- *Unsloth might cause trouble with the environment since ppl have diffrent architectures of GPUs, the current environment is based on Ampere GPUs*
+
 ### Structure
 ```
 .
