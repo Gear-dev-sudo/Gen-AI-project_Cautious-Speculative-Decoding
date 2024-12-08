@@ -13,6 +13,22 @@
 This project implements a modified version of speculative decoding that prioritizes safety and content filtering while maintaining generation quality. [The draft model](https://huggingface.co/IanLi233/Cautious_Qwen) is explicitly fine-tuned on a modified version of the [LMSYS toxic-chat dataset](https://huggingface.co/datasets/lmsys/toxic-chat),which you can find  [here](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2),
  to improve toxicity detection, which comes at the cost of reduced [BERTScore](https://github.com/Tiiiger/bert_score) textual performance. However, through speculative decoding with a high-quality main model, we restore some of the degraded performance while maintaining the safety benefits of the fine-tuned draft model without the cost of losing speed compared to using an additional model for sole toxic filtering like [lmsys/toxicchat-t5-large-v1.0](https://huggingface.co/lmsys/toxicchat-t5-large-v1.0). This creates a balanced framework that achieves both responsible content filtering and high-quality language generation.
 
+### Objective and Methods
+#### Do TextQA with toxicity detection on prompt with no extra cost on:
+- Additional Toxic Detection Model Overhead
+- Loss on textual QA Performance
+
+#### Methods:
+- Fine-tune an LLM that does toxic detection while still generating normal answers 
+    - by using a custom instruction: 
+    ```"You are an AI content generator with moderation. Analyze the input text for toxic content including: hate speech, threats, severe profanity, harassment, racism, personal attacks, or harmful content. Start your response with <Toc> if the input contains toxic content, or <Safe> if it does not contain toxic content." ``` To generate toxicity flag with the answer of the question.
+    - ⚡ [Model](https://huggingface.co/IanLi233/Cautious_Qwen)
+    - However, this comes with the cost of a slight loss on Textutal QA Performance.
+- Restore the Textual QA Performance via Specualative Decoding
+    - use the fine-tuned model aforementioned as the draft model in Speculative Decoding Scheme to to input flagging with response generation.
+    - if the $<Toc>$ is found in the output of the draft, terminate the generation cycle of specuative decoding.
+    - else, verify the QA answer that draft model generated with rejection sampling in specuative decoding, if the output is being rejected by the larger model, have the larger model re-generate the response, if else, use the smaller/draft model's response, and continue in this pattern until generation stops.
+
 ### Key Features
 - **Safety-Tuned Draft Model**: Fine-tuned on an [Adapted from LMSYS toxic-chat dataset](https://huggingface.co/datasets/IanLi233/Toxic-Chat-V2) for enhanced traditional jailbreaking or toxicity awareness, when the draft model detects the prompt to be "toxic", the generation simply terminates.
 - **Quality Restoration**: Uses main model's higher quality outputs to compensate for draft model(with toxic filtering capabilities)'s BERTScore degradation 
